@@ -28,6 +28,6 @@ See example/
 
 ## Additional information
 
-![Example: ](https://github.com/phuhungtran/load-more-std/blob/master/screenshots/example.mp4?raw=true)
+![Example: ](https://im3.ezgif.com/tmp/ezgif-3-9f0bbe2447.gif)
 
 
