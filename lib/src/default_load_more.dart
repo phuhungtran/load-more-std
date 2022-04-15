@@ -5,11 +5,13 @@ class DefaultLoadMoreView extends StatefulWidget {
   final LoadMoreStatus status;
   final LoadMoreDelegate delegate;
   final LoadMoreTextBuilder textBuilder;
+  final Widget? loadingWidget;
   const DefaultLoadMoreView({
     Key? key,
     this.status = LoadMoreStatus.idle,
     required this.delegate,
     required this.textBuilder,
+    this.loadingWidget,
   }) : super(key: key);
 
   @override
@@ -35,12 +37,11 @@ class DefaultLoadMoreViewState extends State<DefaultLoadMoreView> {
         }
       },
       child: Container(
-        height: delegate.widgetHeight(widget.status),
+        // height: delegate.widgetHeight(widget.status),
+        padding: const EdgeInsets.only(bottom: 10),
         alignment: Alignment.center,
-        child: delegate.buildChild(
-          widget.status,
-          builder: widget.textBuilder,
-        ),
+        child: delegate.buildChild(widget.status,
+            builder: widget.textBuilder, loadingWidget: widget.loadingWidget),
       ),
     );
   }
@@ -81,7 +82,8 @@ abstract class LoadMoreDelegate {
   Duration loadMoreDelay() => Duration(milliseconds: _loadMoreDelay);
 
   Widget buildChild(LoadMoreStatus status,
-      {LoadMoreTextBuilder builder = DefaultLoadMoreTextBuilder.english});
+      {LoadMoreTextBuilder builder = DefaultLoadMoreTextBuilder.english,
+      Widget? loadingWidget});
 }
 
 class DefaultLoadMoreDelegate extends LoadMoreDelegate {
@@ -89,23 +91,25 @@ class DefaultLoadMoreDelegate extends LoadMoreDelegate {
 
   @override
   Widget buildChild(LoadMoreStatus status,
-      {LoadMoreTextBuilder builder = DefaultLoadMoreTextBuilder.english}) {
+      {LoadMoreTextBuilder builder = DefaultLoadMoreTextBuilder.english,
+      Widget? loadingWidget}) {
     String text = builder(status);
-    if (status == LoadMoreStatus.fail) {
-      return Container(
-        child: Text(text),
-      );
-    }
-    if (status == LoadMoreStatus.idle) {
-      return Text(text);
-    }
+    // if (status == LoadMoreStatus.fail) {
+    //   return Container(
+    //     child: Text(text),
+    //   );
+    // }
+    // if (status == LoadMoreStatus.idle) {
+    //   return Text(text);
+    // }
     if (status == LoadMoreStatus.loading) {
+      if (loadingWidget != null) return loadingWidget;
       return Container(
         alignment: Alignment.center,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SizedBox(
+            const SizedBox(
               width: _loadmoreIndicatorSize,
               height: _loadmoreIndicatorSize,
               child: CircularProgressIndicator(
@@ -120,11 +124,11 @@ class DefaultLoadMoreDelegate extends LoadMoreDelegate {
         ),
       );
     }
-    if (status == LoadMoreStatus.nomore) {
-      return Text(text);
-    }
+    // if (status == LoadMoreStatus.nomore) {
+    //   return Text(text);
+    // }
 
-    return Text(text);
+    return const SizedBox.shrink();
   }
 }
 

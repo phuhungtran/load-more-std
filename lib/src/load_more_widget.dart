@@ -79,6 +79,9 @@ class LoadMore extends StatefulWidget {
   /// when [whenEmptyLoad] is true, and when listView children length is 0,or the itemCount is 0,not build loadMoreWidget
   final bool whenEmptyLoad;
 
+  /// Show at the end of the list and disappear whenever [isFinish] is true
+  final Widget? loadMoreWidget;
+
   const LoadMore({
     Key? key,
     required this.child,
@@ -87,6 +90,7 @@ class LoadMore extends StatefulWidget {
     this.isFinish = false,
     this.delegate,
     this.whenEmptyLoad = true,
+    this.loadMoreWidget,
   }) : super(key: key);
 
   @override
@@ -132,6 +136,7 @@ class _LoadMoreState extends State<LoadMore> {
         break outer;
       }
       var viewCount = (delegate.estimatedChildCount ?? 0) + 1;
+      // ignore: prefer_function_declarations_over_variables
       IndexedWidgetBuilder builder = (context, index) {
         if (index == viewCount - 1) {
           return _buildLoadMoreView();
@@ -204,6 +209,7 @@ class _LoadMoreState extends State<LoadMore> {
         break outer;
       }
       final viewCount = (delegate.estimatedChildCount ?? 0) + 1;
+      // ignore: prefer_function_declarations_over_variables
       IndexedWidgetBuilder builder = (context, index) {
         if (index == viewCount - 1) {
           return _buildLoadMoreView();
@@ -261,6 +267,7 @@ class _LoadMoreState extends State<LoadMore> {
           status: status,
           delegate: loadMoreDelegate,
           textBuilder: widget.textBuilder ?? LoadMore.buildTextBuilder(),
+          loadingWidget: widget.loadMoreWidget,
         ),
         onNotification: _onLoadMoreBuild,
       ),
