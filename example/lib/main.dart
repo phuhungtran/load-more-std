@@ -52,27 +52,26 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Container(
-        child: RefreshIndicator(
-          child: LoadMore(
-            isFinish: count >= 60,
-            onLoadMore: _loadMore,
-            child: ListView.builder(
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  child: Text(list[index].toString()),
-                  height: 40.0,
-                  alignment: Alignment.center,
-                );
-              },
-              itemCount: count,
-            ),
-            whenEmptyLoad: false,
-            delegate: const DefaultLoadMoreDelegate(),
-            textBuilder: DefaultLoadMoreTextBuilder.vietnamese,
+      body: RefreshIndicator(
+        child: LoadMore(
+          isFinish: count >= 120,
+          onLoadMore: _loadMore,
+          loadMoreWidget:
+              const SizedBox(height: 30, child: CircularProgressIndicator()),
+          child: ListView.builder(
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                child: Text(list[index].toString()),
+                height: 40.0,
+                alignment: Alignment.center,
+              );
+            },
+            itemCount: count,
           ),
-          onRefresh: _refresh,
+          whenEmptyLoad: false,
+          delegate: const DefaultLoadMoreDelegate(),
         ),
+        onRefresh: _refresh,
       ),
     );
   }
